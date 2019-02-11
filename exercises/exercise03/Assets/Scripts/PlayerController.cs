@@ -43,10 +43,10 @@ public class PlayerController : MonoBehaviour {
 
     void SetCountText ()
     {
-        countText.text = "Count: " + count.ToString();
+        countText.text = "cheezburgurz: " + count.ToString() + "?";
         if (count >= 12)
         {
-            winText.text = "You win!";
+            winText.text = "i can haz cheezburgurz!";
         }
     }
 }
