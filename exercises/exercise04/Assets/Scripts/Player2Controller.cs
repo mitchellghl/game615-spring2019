@@ -6,7 +6,7 @@ public class Player2Controller : MonoBehaviour
 {
     private Rigidbody rb;
     float speed = 10;
-
+    public GameObject Player2Bullet;
 
     // Start is called before the first frame update
     void Start()
@@ -32,6 +32,11 @@ public class Player2Controller : MonoBehaviour
         if (Input.GetKey(KeyCode.D))
         {
             rb.AddForce(Vector3.right * speed);
+        }
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            GameObject bullet = Instantiate(Player2Bullet, transform.position, transform.rotation);
         }
     }
 }
