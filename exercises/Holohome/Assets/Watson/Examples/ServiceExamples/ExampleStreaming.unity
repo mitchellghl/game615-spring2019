@@ -271,7 +271,7 @@ GameObject:
   - component: {fileID: 907642369}
   - component: {fileID: 907642368}
   m_Layer: 0
-  m_Name: Sphere
+  m_Name: StateSphere
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -709,10 +709,17 @@ MonoBehaviour:
   ResultsField: {fileID: 1863902092}
   _iamApikey: b0kREMubd3LFTt2EB-uDv8VHeEuVAhQRem-GvRHMxAUT
   _recognizeModel: 
-  RedMaterial: {fileID: 2100000, guid: 096b333bd524afb45936bdd206050c53, type: 2}
-  BlueMaterial: {fileID: 2100000, guid: 7a26f5994ab577e4894740ce58f2bffb, type: 2}
-  GreenMaterial: {fileID: 2100000, guid: bfb5f4b99fa7ec2428fc6272af21e2fd, type: 2}
-  SphereMeshRenderer: {fileID: 907642369}
+  StateSphere: {fileID: 907642369}
+  AssistanceMaterial: {fileID: 2100000, guid: 7a26f5994ab577e4894740ce58f2bffb, type: 2}
+  CheckMaterial: {fileID: 2100000, guid: bfb5f4b99fa7ec2428fc6272af21e2fd, type: 2}
+  CorrectMaterial: {fileID: 2100000, guid: 096b333bd524afb45936bdd206050c53, type: 2}
+  HowToMaterial: {fileID: 2100000, guid: 38265f3576a3d3341b19b6efdf59544f, type: 2}
+  IdleMaterial: {fileID: 2100000, guid: 1af691c31e4d3944284cd71e0e5ed730, type: 2}
+  IncorrectMaterial: {fileID: 2100000, guid: 2c3c623a8c6310d44a26a8d7c32f60fa, type: 2}
+  IntroductionMaterial: {fileID: 2100000, guid: 16a5c50d3c878334891120a85707a134,
+    type: 2}
+  NewQuestionMaterial: {fileID: 2100000, guid: be1119f36cf516a4097f72c3d7cd20e5, type: 2}
+  StruggleMaterial: {fileID: 2100000, guid: 8fb959020c9e8fa49a6f843fb265cc7b, type: 2}
 --- !u!4 &1646685151
 Transform:
   m_ObjectHideFlags: 0
@@ -821,3 +828,33 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1863902089}
   m_CullTransparentMesh: 0
+--- !u!1 &2044575865
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2044575866}
+  m_Layer: 0
+  m_Name: AllStates
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2044575866
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2044575865}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.3142868, y: -1.0951126, z: -0.97864443}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 8
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

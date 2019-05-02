@@ -24,6 +24,7 @@ using IBM.Watson.DeveloperCloud.Utilities;
 using IBM.Watson.DeveloperCloud.DataTypes;
 using System.Collections.Generic;
 using UnityEngine.UI;
+using Holostates;
 
 public class ExampleStreaming : MonoBehaviour
 {
@@ -46,6 +47,21 @@ public class ExampleStreaming : MonoBehaviour
     private string _recognizeModel;
     #endregion
 
+    //~~~~~~~~~~My variables~~~~~~~~~~~
+
+    public MeshRenderer StateSphere;
+    public Material AssistanceMaterial;
+    public Material CheckMaterial;
+    public Material CorrectMaterial;
+    public Material HowToMaterial;
+    public Material IdleMaterial;
+    public Material IncorrectMaterial;
+    public Material IntroductionMaterial;
+    public Material NewQuestionMaterial;
+    public Material StruggleMaterial;
+    
+    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    
 
     private int _recordingRoutine = 0;
     private string _microphoneID = null;
@@ -55,15 +71,14 @@ public class ExampleStreaming : MonoBehaviour
 
     private SpeechToText _service;
 
-    public Material RedMaterial;
-    public Material BlueMaterial;
-    public Material GreenMaterial;
-    public MeshRenderer SphereMeshRenderer;
+    public StateMachine<ExampleStreaming> stateMachine { get; set; }
 
     void Start()
     {
         LogSystem.InstallDefaultReactors();
         Runnable.Run(CreateService());
+        stateMachine = new StateMachine<ExampleStreaming>(this);
+        stateMachine.ChangeState(IntroductionState.Instance);
     }
 
     private IEnumerator CreateService()
@@ -220,19 +235,84 @@ public class ExampleStreaming : MonoBehaviour
                     Log.Debug("ExampleStreaming.OnRecognize()", text);
                     ResultsField.text = text;
 
-                    //THIS IS WHERE I ADDED CODE
-                    if (alt.transcript.Contains("red")){
-                        SphereMeshRenderer.material = RedMaterial;
+                    //~~~~~~~~~~~~~~I ADDED MY CODE HERE~~~~~~~~~~~~~~~~~
+
+
+
+                    //~~~~~~~~~~~~~Flow chart of states~~~~~~~~~~~~~
+                    //Introduction -> New Question -> Idle
+                    //Idle -> Assistance -> Multiply (Simple or Deep) or Instructions -> Idle
+                    //Idle -> Check Answer -> Correct (New Question) or Incorrect -> Idle
+                    //Idle (Time) -> Struggle (Yes (New Question) or No) -> Idle
+
+                    //Idle State
+                    if (stateMachine.currentState == IdleState.Instance)
+                    {
+                        if (alt.transcript.Contains("assistance"))
+                        {
+                            stateMachine.ChangeState(AssistanceState.Instance);
+                        }
+                        if (alt.transcript.Contains("check answer"))
+                        {
+                            stateMachine.ChangeState(CheckAnswerState.Instance);
+                        }
                     }
 
-                    if (alt.transcript.Contains("blue")){
-                        SphereMeshRenderer.material = BlueMaterial;
+                    //Assistance State
+                    if (stateMachine.currentState == AssistanceState.Instance)
+                    {
+                        if (alt.transcript.Contains("instructions"))
+                        {
+                            stateMachine.ChangeState(IdleState.Instance);
+                        }
+
+                        if (alt.transcript.Contains("multiply"))
+                        {
+                            stateMachine.ChangeState(HowToMultiplyState.Instance);
+                        }
                     }
 
-                    if (alt.transcript.Contains("green")){
-                        SphereMeshRenderer.material = GreenMaterial;
+                    //How To Multiply State
+                    if (stateMachine.currentState == HowToMultiplyState.Instance)
+                    {
+                        if (alt.transcript.Contains("simple"))
+                        {
+                            stateMachine.ChangeState(IdleState.Instance);
+                        }
+                        if (alt.transcript.Contains("deep"))
+                        {
+                            stateMachine.ChangeState(IdleState.Instance);
+                        }
+                    }
+
+                    //Check Answer State
+                    if (stateMachine.currentState == CheckAnswerState.Instance)
+                    {
+                        if (alt.transcript.Contains("correct"))
+                        {
+                            stateMachine.ChangeState(CorrectAnswerState.Instance);
+                        }
+                        if (alt.transcript.Contains("incorrect"))
+                        {
+                            stateMachine.ChangeState(IncorrectAnswerState.Instance);
+                        }
+                    }
+
+                    //Struggle State
+                    if (stateMachine.currentState == StruggleState.Instance)
+                    {
+                        if (alt.transcript.Contains("yes"))
+                        {
+                            stateMachine.ChangeState(NewQuestionState.Instance);
+                        }
+                        if (alt.transcript.Contains("no"))
+                        {
+                            stateMachine.ChangeState(IdleState.Instance);
+                        }
                     }
                 }
+
+                //~~~~~~~~~~~Done Adding Code Here ~~~~~~~~~~~~~
 
                 if (res.keywords_result != null && res.keywords_result.keyword != null)
                 {
@@ -263,6 +343,47 @@ public class ExampleStreaming : MonoBehaviour
             {
                 Log.Debug("ExampleStreaming.OnRecognizeSpeaker()", string.Format("speaker result: {0} | confidence: {3} | from: {1} | to: {2}", labelResult.speaker, labelResult.from, labelResult.to, labelResult.confidence));
             }
+        }
+    }
+
+    private void Update()
+    {
+        stateMachine.Update();
+        if(stateMachine.currentState == AssistanceState.Instance)
+        {
+            StateSphere.material = AssistanceMaterial;
+        }
+        if (stateMachine.currentState == CheckAnswerState.Instance)
+        {
+            StateSphere.material = CheckMaterial;
+        }
+        if (stateMachine.currentState == CorrectAnswerState.Instance)
+        {
+            StateSphere.material = CorrectMaterial;
+        }
+        if (stateMachine.currentState == HowToMultiplyState.Instance)
+        {
+            StateSphere.material = HowToMaterial;
+        }
+        if (stateMachine.currentState == IdleState.Instance)
+        {
+            StateSphere.material = IdleMaterial;
+        }
+        if (stateMachine.currentState == IncorrectAnswerState.Instance)
+        {
+            StateSphere.material = IncorrectMaterial;
+        }
+        if (stateMachine.currentState == IntroductionState.Instance)
+        {
+            StateSphere.material = IntroductionMaterial;
+        }
+        if (stateMachine.currentState == NewQuestionState.Instance)
+        {
+            StateSphere.material = NewQuestionMaterial;
+        }
+        if (stateMachine.currentState == StruggleState.Instance)
+        {
+            StateSphere.material = StruggleMaterial;
         }
     }
 }
