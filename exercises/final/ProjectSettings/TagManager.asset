@@ -13,15 +13,15 @@ TagManager:
   - UI
   - 
   - 
+  - Background
   - Ground
+  - Rope
+  - Pivot
+  - 
+  - Player
   - 
   - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - Foreground
   - 
   - 
   - 
