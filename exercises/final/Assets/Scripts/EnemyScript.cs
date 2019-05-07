@@ -33,6 +33,8 @@ public class EnemyScript : MonoBehaviour
             player.gameObject.GetComponent<PlayerController>().immunity = immunityTime;
             gameManager.gameObject.GetComponent<GameManager>().health--;
             gameManager.gameObject.GetComponent<GameManager>().audioPlayer.Play();
+            gameManager.gameObject.GetComponent<GameManager>().damaged = true;
+            gameManager.gameObject.GetComponent<GameManager>().StartCoroutine("DamageFlicker");
         }
     }
 }

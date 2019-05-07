@@ -22,7 +22,9 @@ public class GameManager : MonoBehaviour
     public GameObject skull3;
     public GameObject gameOverText;
     public GameObject scoreTextBox;
+    public GameObject highScoreText;
     public Text scoreText;
+    public Text highScore;
 
     public bool gameOver;
 
@@ -31,6 +33,8 @@ public class GameManager : MonoBehaviour
     public AudioClip enemySpawnSound;
     public AudioSource enemySpawnPlayer;
 
+    public bool damaged;
+
     void Start()
     {
         health = 3;
@@ -38,8 +42,11 @@ public class GameManager : MonoBehaviour
         gameOver = false;
         gameOverText.gameObject.SetActive(false);
         scoreText = scoreTextBox.GetComponent<Text>();
+        highScore = highScoreText.GetComponent<Text>();
+        highScoreText.gameObject.SetActive(false);
         audioPlayer.clip = damage;
         enemySpawnPlayer.clip = enemySpawnSound;
+        Debug.Log(PlayerPrefs.GetInt("High Score"));
     }
 
     void Update()
@@ -68,6 +75,13 @@ public class GameManager : MonoBehaviour
                 skull3.gameObject.SetActive(false);
                 gameOver = true;
                 gameOverText.gameObject.SetActive(true);
+                if (score > PlayerPrefs.GetInt("High Score"))
+                {
+                    PlayerPrefs.SetInt("High Score", score);
+                    Debug.Log(PlayerPrefs.GetInt("High Score"));
+                }
+                highScoreText.gameObject.SetActive(true);
+                highScore.text = "High Score: " + PlayerPrefs.GetInt("High Score");
                 break;
         }
 
@@ -113,5 +127,35 @@ public class GameManager : MonoBehaviour
             }
         }
 
+    }
+
+    IEnumerator DamageFlicker()
+    {
+        Debug.Log("I got hit");
+        var sr = player.gameObject.GetComponent<SpriteRenderer>();
+        while (damaged)
+        {
+            sr.color = new Color (1f,0.5f,0.5f,0.5f);
+            yield return new WaitForSeconds(0.5f);
+
+            sr.color = new Color(1f, 0.5f, 0.5f, 0.75f);
+            yield return new WaitForSeconds(0.5f);
+
+            sr.color = new Color(1f, 0.5f, 0.5f, 0.5f);
+            yield return new WaitForSeconds(0.5f);
+
+            sr.color = new Color(1f, 0.5f, 0.5f, 0.75f);
+            yield return new WaitForSeconds(0.5f);
+
+            sr.color = new Color(1f, 0.5f, 0.5f, 0.5f);
+            yield return new WaitForSeconds(0.5f);
+
+            sr.color = new Color(1f, 0.5f, 0.5f, 0.75f);
+            yield return new WaitForSeconds(0.5f);
+
+            sr.color = new Color(1f, 1f, 1f, 1f);
+            damaged = false;
+            yield return null;
+        }
     }
 }

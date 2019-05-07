@@ -10,6 +10,11 @@ public class GameStartScript : MonoBehaviour
     void Start()
     {
         shake = 0.025f;
+        if (!PlayerPrefs.HasKey("High Score"))
+        {
+            PlayerPrefs.SetInt("High Score", 0);
+        }
+        Debug.Log(PlayerPrefs.GetInt("High Score"));
     }
 
     void Update()
@@ -28,6 +33,11 @@ public class GameStartScript : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space))
         {
             SceneManager.LoadScene("PlayScene");
+        }
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            PlayerPrefs.SetInt("High Score", 0);
+            Debug.Log("High Score Reset to " + PlayerPrefs.GetInt("High Score"));
         }
     }
 }
