@@ -28,13 +28,24 @@ public class GraveScript : MonoBehaviour
                 ritualTimer += Time.deltaTime;
                 ritualLights.gameObject.SetActive(true);
                 audioPlayer.Play();
+            } else
+            {
+                ritualLights.gameObject.SetActive(false);
             }
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Player"))
+        {
+            ritualLights.gameObject.SetActive(false);
         }
     }
 
     void Update()
     {
-        if(ritualTimer > 0.5)
+        if(ritualTimer > 0.3)
         {
             Instantiate(Skeleton, transform.position, transform.rotation);
             Destroy(gameObject);

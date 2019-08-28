@@ -22,6 +22,8 @@ public class GameManagerScript : MonoBehaviour
     public GameObject gameOverText;
     public GameObject gameOverPanel;
     public GameObject scoreTextBox;
+    public GameObject highScoreText;
+    public Text highScore;
     public Text scoreText;
 
     public AudioClip scoreSound;
@@ -33,11 +35,20 @@ public class GameManagerScript : MonoBehaviour
     void Start()
     {
         spawnTimer = 0;
+        score = 0;
 
         gameOverText.gameObject.SetActive(false);
         gameOverPanel.gameObject.SetActive(false);
+        highScoreText.gameObject.SetActive(false);
         scoreText = scoreTextBox.GetComponent<Text>();
+        highScore = highScoreText.GetComponent<Text>();
         audioPlayer.clip = scoreSound;
+
+        if (!PlayerPrefs.HasKey("High Score"))
+        {
+            PlayerPrefs.SetInt("High Score", 0);
+        }
+        Debug.Log(PlayerPrefs.GetInt("High Score"));
     }
 
     // Update is called once per frame
@@ -62,10 +73,15 @@ public class GameManagerScript : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.R))
         {
-            SceneManager.LoadScene("GameScene");
+            SceneManager.LoadScene("StartScene");
         }
 
-        if(player.GetComponent<PlayerController>().gameOver == true)
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Application.Quit();
+        }
+
+        if (player.GetComponent<PlayerController>().gameOver == true)
         {
             audioPlayer.clip = gameOverSound;
             if(playOnce == false)
@@ -76,6 +92,13 @@ public class GameManagerScript : MonoBehaviour
             player.gameObject.SetActive(false);
             gameOverText.gameObject.SetActive(true);
             gameOverPanel.gameObject.SetActive(true);
+            if (score > PlayerPrefs.GetInt("High Score"))
+            {
+                PlayerPrefs.SetInt("High Score", score);
+                Debug.Log(PlayerPrefs.GetInt("High Score"));
+            }
+            highScoreText.gameObject.SetActive(true);
+            highScore.text = "High Score: " + PlayerPrefs.GetInt("High Score");
         }
     }
 }

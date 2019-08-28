@@ -18,12 +18,16 @@ public class SkeletonScript : MonoBehaviour
     public AudioSource deathPlayer;
     public GameObject deathSounds;
 
+    public GameObject gameManager;
+
     // Start is called before the first frame update
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         sr = GetComponent<SpriteRenderer>();
         player = GameObject.Find("Player");
+        gameManager = GameObject.Find("GameManager");
+        gameManager.GetComponent<GameManagerScript>().score += 5;
         Physics2D.IgnoreCollision(player.GetComponent<Collider2D>(), gameObject.GetComponent<Collider2D>());
 
         if (Random.value > 0.5)

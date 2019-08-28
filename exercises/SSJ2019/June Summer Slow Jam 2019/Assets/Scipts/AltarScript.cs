@@ -28,6 +28,9 @@ public class AltarScript : MonoBehaviour
                 ritualLights.gameObject.SetActive(true);
 
                 audioPlayer.Play();
+            } else
+            {
+                ritualLights.gameObject.SetActive(false);
             }
         }
     }
